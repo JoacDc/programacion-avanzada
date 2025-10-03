@@ -1,63 +1,26 @@
-# ==============================
-# Archivos de compilación y generados
-# ==============================
 
-# Compiled class files
-*.class
 
-# Maven
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# 1. Ignora todos los archivos y carpetas.
+*
 
-# Archivos temporales y logs
-*.log
-*.tmp
-*.swp
+# 2. NO ignore los directorios.
+!*/
 
-# ==============================
-# IDEs
-# ==============================
+# 3. NO ignore ningún archivo que termine en .java, en cualquier subdirectorio.
+!**/*.java
+!pom.xml
 
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
-*.iml
-*.ipr
-out/
+# 4. NO ignore este propio archivo .gitignore para que se suba al repositorio.
+!.gitignore
 
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings/
-.springBeans
-.sts4-cache
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
+.idea/
 .vscode/
+target/
+build/
+out/
+*.class
+*.log
+*.iml
 
-# ==============================
-# Sistema operativo
-# ==============================
-
-# Mac OS
-.DS_Store
-
-# Windows
-Thumbs.db
+/.idea

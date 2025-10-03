@@ -1,8 +1,12 @@
+import Persona.Exception.PersonaException;
 import org.example.Persona;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import java.time.LocalDate;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class PersonaTest {
@@ -11,7 +15,7 @@ public class PersonaTest {
     @Order(1)
     @DisplayName("Verificar objeto")
     public void test() {
-        Persona p1 = new Persona("Joaquin",
+        Persona p1 = Persona.create("Joaquin",
                 "del Canto",
                 LocalDate.of(1990, 1, 1),
                 "12.345.678",
@@ -40,8 +44,8 @@ public class PersonaTest {
     @Order(3)
     @DisplayName("Campo apellido vacio")
     public void campo_apellido_vacio() {
-        Exception exception = assertThrows(IllegalArgumentException.class, ()
-                        -> Persona.create("Juan",
+        Exception exception = assertThrows(PersonaException.class, ()
+                -> Persona.create("Juan",
                 "",
                 LocalDate.of(2000,1,1),
                 "12.345.678",
@@ -56,7 +60,7 @@ public class PersonaTest {
     @Order(4)
     @DisplayName("Campo nombre vacio")
     public void campo_Nombre_Vacio() {
-        Exception exception = assertThrows(IllegalArgumentException.class, ()
+        Exception exception = assertThrows(PersonaException.class, ()
                 -> Persona.create("",
                 "perez",
                 LocalDate.of(2000,1,1),
@@ -72,7 +76,7 @@ public class PersonaTest {
     @Order(5)
     @DisplayName("Campo nombre y apelldio vacios")
     public void campos_Nombre_Y_Apellido_Vacios() {
-        Exception exception = assertThrows(IllegalArgumentException.class, ()
+        Exception exception = assertThrows(PersonaException.class, ()
                 -> Persona.create("",
                 "",
                 LocalDate.of(2000,1,1),
@@ -91,26 +95,23 @@ public class PersonaTest {
         Persona persona = Persona.create("Juan",
                 "perez",
                 LocalDate.of(2000,1,1),
-                "12.345.678",
+                "12345678",
                 180.0f,
                 80.5f);
 
         Assertions.assertEquals("Juan",persona.getNombre());
         Assertions.assertEquals("perez",persona.getApellido());
-        Assertions.assertEquals("12.345.678",persona.getDni());
+        Assertions.assertEquals("12345678",persona.getDni());
         Assertions.assertEquals(180.0f ,persona.getAltura());
         Assertions.assertEquals(80.5f ,persona.getPeso());
         Assertions.assertEquals(LocalDate.of(2000,1,1) ,persona.getFechaNacimiento());
-
     }
-
 
     @Test
     @Order(7)
     @DisplayName("DNI Vacio")
-
     public void campo_dni_Vacio() {
-        Exception exception = assertThrows(IllegalArgumentException.class,
+        Exception exception = assertThrows(PersonaException.class,
                 () -> Persona.create("Juan",
                         "perez",
                         LocalDate.of(2000,1,1),
@@ -119,15 +120,14 @@ public class PersonaTest {
                         80.5f)
         );
 
-        Assertions.assertEquals("Espacios en blanco en DNI", exception.getMessage());
+        Assertions.assertEquals("Campo Dni Vacio: corregir", exception.getMessage());
     }
 
     @Test
     @Order(8)
     @DisplayName("DNI con menos de seis digitos")
-
     public void campo_dni_con_menos_digitos() {
-        Exception exception = assertThrows(IllegalArgumentException.class,
+        Exception exception = assertThrows(PersonaException.class,
                 () -> Persona.create("Juan",
                         "perez",
                         LocalDate.of(2000,1,1),
@@ -142,9 +142,8 @@ public class PersonaTest {
     @Test
     @Order(9)
     @DisplayName("DNI con digitos demas")
-
     public void campo_dni_con_digitos_demas() {
-        Exception exception = assertThrows(IllegalArgumentException.class,
+        Exception exception = assertThrows(PersonaException.class,
                 () -> Persona.create("Juan",
                         "perez",
                         LocalDate.of(2000,1,1),
@@ -159,30 +158,28 @@ public class PersonaTest {
     @Test
     @Order(10)
     @DisplayName("DNI formateado sin puntos")
-
     public void campo_dni_formateado() {
-        Persona persona = new Persona("Juan",
-                        "perez",
-                        LocalDate.of(2000,1,1),
-                        "12.345.678",
-                        180.0f,
-                        80.5f);
+        Persona persona =  Persona.create("Juan",
+                "perez",
+                LocalDate.of(2000,1,1),
+                "12.345.678",
+                180.0f,
+                80.5f);
 
-        Assertions.assertEquals("12345678", persona.formatDni());
+        Assertions.assertEquals("12345678", persona.getDni());
     }
 
     @Test
     @Order(11)
     @DisplayName("Campo Peso Invalido")
-
     public void campo_Peso_Invalido() {
-        Exception excpetion = assertThrows(IllegalArgumentException.class,
-        () -> Persona.create("Juan",
-                "perez",
-                LocalDate.of(2000,1,1),
-                "12345678",
-                180.0f,
-                1.5f)
+        Exception excpetion = assertThrows(PersonaException.class,
+                () -> Persona.create("Juan",
+                        "perez",
+                        LocalDate.of(2000,1,1),
+                        "12345678",
+                        180.0f,
+                        1.5f)
         );
         Assertions.assertEquals("Peso invalido", excpetion.getMessage());
     }
@@ -190,9 +187,8 @@ public class PersonaTest {
     @Test
     @Order(12)
     @DisplayName("Campo altura Invalido")
-
     public void campo_Altura_Invalido() {
-        Exception excpetion = assertThrows(IllegalArgumentException.class,
+        Exception excpetion = assertThrows(PersonaException.class,
                 () -> Persona.create("Juan",
                         "perez",
                         LocalDate.of(2000,1,1),
@@ -206,12 +202,11 @@ public class PersonaTest {
     @Test
     @Order(13)
     @DisplayName("Fecha Invalida")
-
     public void campo_fecha_Invalida() {
-        Exception excpetion = assertThrows(IllegalArgumentException.class,
+        Exception excpetion = assertThrows(PersonaException.class,
                 () -> Persona.create("Juan",
                         "perez",
-                        LocalDate.of(2024,12,1),
+                        LocalDate.of(2026,8,1),
                         "12345678",
                         180.1f,
                         67.5f)

@@ -1,5 +1,7 @@
 package org.example;
 
+import Persona.Exception.PersonaException;
+
 import java.time.LocalDate;
 
 public class Persona {
@@ -11,49 +13,50 @@ public class Persona {
     private float altura;
     private float peso;
 
-
-    public Persona(String nombre, String apellido, LocalDate fechaNacimiento, String dni, float altura, float peso) {
+    private Persona(String nombre, String apellido, LocalDate fechaNacimiento, String dni, float altura, float peso) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
-        this.dni = dni;
+        this.dni = dni.replace(".","");
         this.altura = altura;
         this.peso = peso;
     }
 
     public static Persona create(String nombre,
-                  String apellido,
-                  LocalDate fechaNacimiento,
-                  String dni,
-                  float altura,
-                  float peso) {
+                                 String apellido,
+                                 LocalDate fechaNacimiento,
+                                 String dni,
+                                 float altura,
+                                 float peso) {
         LocalDate localDate = LocalDate.now();
 
         if(fechaNacimiento.isAfter(localDate)) {
-            throw new IllegalArgumentException("Fecha invalida");
+            throw new PersonaException("Fecha invalida");
         }
 
-        if(nombre == null || nombre.isBlank() || apellido == null || apellido.isBlank()) {
-            throw new IllegalArgumentException("Espacios en blanco");
+        if(nombre == null || nombre.isEmpty() || apellido == null || apellido.isEmpty()) {
+            throw new PersonaException("Espacios en blanco");
         }
 
-        if(dni == null || dni.isBlank()) {
-            throw new IllegalArgumentException("Espacios en blanco en DNI");
+        if((dni == null) || dni.isBlank()) {
+            throw new PersonaException("Campo Dni Vacio: corregir");
         }
 
-        if(dni.length() > 8 || dni.length() < 6) {
-            throw new IllegalArgumentException("DNI mal Escrito");
+        String dniFormat = dni.replace(".","");
+
+        if(dniFormat.length() > 8 || dniFormat.length() < 6) {
+            throw new PersonaException("DNI mal Escrito");
         }
 
         if(peso < 2.5f){
-            throw new IllegalArgumentException("Peso invalido");
+            throw new PersonaException("Peso invalido");
         }
 
         if(altura < 0.40f){
-            throw new IllegalArgumentException("Altura invalida");
+            throw new PersonaException("Altura invalida");
         }
 
-        return new Persona(nombre, apellido, fechaNacimiento, dni, altura, peso);
+        return new Persona(nombre, apellido, fechaNacimiento, dniFormat, altura, peso);
     }
 
     public String getNombre() {
@@ -79,10 +82,5 @@ public class Persona {
     public float getPeso(){
         return this.peso;
     }
-
-    public String formatDni(){
-
-        return this.dni.replace(".","");
-    };
 
 }
